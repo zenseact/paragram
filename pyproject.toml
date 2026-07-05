@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "paragram"
+version = "0.1.0"
+description = "GPU construction of 3D Voronoi and power diagrams"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "ninja>=1.11",
+    "packaging>=23",
+    "rich>=13",
+    "torch>=2.2",
+]
+
+[project.optional-dependencies]
+bench = [
+    "numpy>=1.24",
+    "pandas>=2",
+]
+dev = [
+    "numpy>=1.24",
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[tool.setuptools.packages.find]
+include = ["paragram*"]
+
+[tool.setuptools.package-data]
+paragram = [
+    "csrc/**/*.cpp",
+    "csrc/**/*.cu",
+    "csrc/**/*.cuh",
+    "csrc/**/*.h",
+    "external/**/*",
+]
+
+[tool.ruff]
+line-length = 100
+exclude = ["paragram/external"]

@@ -1,0 +1,3 @@
+[submodule "paragram/external/cubql"]
+	path = paragram/external/cubql
+	url = https://github.com/NVIDIA/cuBQL.git
