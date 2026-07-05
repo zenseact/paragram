@@ -8,12 +8,18 @@ version = "0.1.0"
 description = "GPU construction of 3D Voronoi and power diagrams"
 readme = "README.md"
 requires-python = ">=3.10"
+license = { file = "LICENSE" }
 dependencies = [
     "ninja>=1.11",
     "packaging>=23",
     "rich>=13",
     "torch>=2.2",
 ]
+
+[project.urls]
+Homepage = "https://research.zenseact.com/publications/paragram/"
+Repository = "https://github.com/zenseact/paragram"
+Paper = "https://arxiv.org/abs/2605.06408"
 
 [project.optional-dependencies]
 bench = [

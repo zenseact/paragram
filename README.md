@@ -14,16 +14,16 @@
     </a>
 </p>
 
-Paragram is a standalone PyTorch CUDA package for GPU construction of 3D Voronoi and power diagrams. It packages the algorithm used in the SIGGRAPH26 paper "Scalable GPU Construction of 3D Voronoi and Power Diagrams".
+Paragram is a standalone PyTorch CUDA package for GPU construction of 3D Voronoi and power diagrams. It packages the algorithm used in the SIGGRAPH 2026 paper "Scalable GPU Construction of 3D Voronoi and Power Diagrams".
 
-It is designed to be a drop-in replacement for the CPU-based CGAL and Geogram libraries, with a focus on speed and scalability for large point clouds. The library is implemented in C++ and CUDA, and provides a simple Python interface for easy integration into existing workflows. The CUDA compilations is performed lazily on first import, and the library automatically chunks convex-cell scratch memory when free VRAM is limited.
+It is designed as a GPU alternative to CPU-based CGAL and Geogram libraries, with a focus on speed and scalability for large point clouds. The library is implemented in C++ and CUDA, and provides a simple Python interface for integration into existing workflows. The CUDA extension is compiled lazily on first import, and the library automatically chunks convex-cell scratch memory when free VRAM is limited.
 
 > [!NOTE]
-> Lower-resource GPUs can run larger point clouds with a small runtime penalty when chunking is active. This was introduced after the paper allowing for much larger point clouds to be processed despite limited VRAM.
+> Lower-resource GPUs can run larger point clouds with a small runtime penalty when chunking is active. This was introduced after the paper to allow much larger point clouds to be processed despite limited VRAM.
 
 ## Install
 
-The CUDA extension is built lazily on first import (can take a minute the first time). It requires CUDA 12.x and NVCC. The instalations can be done via pip/uv or any other Python package manager.
+The CUDA extension is built lazily on first import, which can take a minute the first time. It requires CUDA 12.x and NVCC. Installation can be done with pip, uv, or another Python package manager.
 
 ```bash
 pip install git+https://github.com/zenseact/paragram.git
