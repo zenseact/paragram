@@ -111,6 +111,38 @@ get_directional_safety_radius(BoxRadii seed_radii, float3 seed_point, VecType bo
     return fmaxf(m03, m47);
 }
 
+__device__ inline void voronoi_stack_push(uint32_t *stack_idx,
+                                          float *stack_dist,
+                                          int &stack_top,
+                                          int cap,
+                                          uint32_t idx,
+                                          float dist)
+{
+    if (stack_top < cap)
+    {
+        stack_idx[stack_top] = idx;
+        stack_dist[stack_top] = dist;
+        stack_top++;
+        return;
+    }
+
+    int far_pos = 0;
+    float far_dist = stack_dist[0];
+    for (int i = 1; i < cap; i++)
+    {
+        if (stack_dist[i] > far_dist)
+        {
+            far_dist = stack_dist[i];
+            far_pos = i;
+        }
+    }
+    if (dist < far_dist)
+    {
+        stack_idx[far_pos] = idx;
+        stack_dist[far_pos] = dist;
+    }
+}
+
 // ******************************************************************
 // Traversal — shrinking box query for standard Voronoi
 // Uses an unsorted stack with min-extraction on pop.
@@ -126,7 +158,7 @@ inline __device__ bool shrinking_voronoi_box_query(const LeafLambda &lambdaToExe
                                                    float3 seed_point,
                                                    voronoi_bvh::BoxRadii seed_radii)
 {
-    const int stackSize = 32;
+    const int stackSize = 64;
     uint32_t stack_idx[stackSize];
     float stack_dist[stackSize];
     int stack_top = 0;
@@ -151,22 +183,12 @@ inline __device__ bool shrinking_voronoi_box_query(const LeafLambda &lambdaToExe
         if (d0 < d1)
         {
             node = n0.admin;
-            if (stack_top < stackSize)
-            {
-                stack_idx[stack_top] = n1Idx;
-                stack_dist[stack_top] = d1;
-                stack_top++;
-            }
+            voronoi_stack_push(stack_idx, stack_dist, stack_top, stackSize, n1Idx, d1);
         }
         else
         {
             node = n1.admin;
-            if (stack_top < stackSize)
-            {
-                stack_idx[stack_top] = n0Idx;
-                stack_dist[stack_top] = d0;
-                stack_top++;
-            }
+            voronoi_stack_push(stack_idx, stack_dist, stack_top, stackSize, n0Idx, d0);
         }
     }
 #endif
@@ -211,11 +233,9 @@ inline __device__ bool shrinking_voronoi_box_query(const LeafLambda &lambdaToExe
                 farDist = d0;
             }
 
-            if (fmaxf(diff0, diff1) < 0.f && stack_top < stackSize)
+            if (fmaxf(diff0, diff1) < 0.f)
             {
-                stack_idx[stack_top] = farIdx;
-                stack_dist[stack_top] = farDist;
-                stack_top++;
+                voronoi_stack_push(stack_idx, stack_dist, stack_top, stackSize, farIdx, farDist);
             }
         }
 
