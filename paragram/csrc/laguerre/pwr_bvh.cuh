@@ -101,32 +101,6 @@ inline void free_bvh(BinaryPwrBVH<float, 3> &bvh)
 // TRAVERSAL
 // ******************************************************************
 
-// Helper wrapper if needed, but we included conservativeDistances.h
-template <typename T, int D>
-inline __device__ __host__ float fSqrDistance_rd(cuBQL::vec_t<T, D> p, cuBQL::box_t<T, D> b)
-{
-    return cuBQL::fSqrDistance_rd(p, b);
-}
-
-// Helper to get int as float for stack (from cuBQL)
-inline __device__ __host__ float __int_as_float_custom(int i)
-{
-#ifdef __CUDA_ARCH__
-    return __int_as_float(i);
-#else
-    return *(float *)&i;
-#endif
-}
-
-inline __device__ __host__ int __float_as_int_custom(float f)
-{
-#ifdef __CUDA_ARCH__
-    return __float_as_int(f);
-#else
-    return *(int *)&f;
-#endif
-}
-
 struct BoxRadii
 {
     // these are squared radii!!!
@@ -154,11 +128,6 @@ struct BoxRadii
         F = upper.x * upper.x + lower.y * lower.y + upper.z * upper.z;
         G = lower.x * lower.x + upper.y * upper.y + upper.z * upper.z;
         H = upper.x * upper.x + upper.y * upper.y + upper.z * upper.z;
-    }
-
-    __device__ __forceinline__ static BoxRadii Invalid()
-    {
-        return BoxRadii(-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f);
     }
 
     __device__ __forceinline__ bool is_valid() { return A >= 0.0f; }

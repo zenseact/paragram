@@ -81,31 +81,6 @@ __device__ inline float4 operator-(const float4 &a, const float4 &b)
     return make_float4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 }
 
-__device__ inline float4 cross(float4 a, float4 b)
-{
-    return make_float4(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x, 0.0f);
-}
-
-__device__ inline float det2x2(float a11, float a12, float a21, float a22) { return a11 * a22 - a12 * a21; }
-
-__device__ inline float
-det3x3(float a11, float a12, float a13, float a21, float a22, float a23, float a31, float a32, float a33)
-{
-    return a11 * det2x2(a22, a23, a32, a33) - a21 * det2x2(a12, a13, a32, a33) + a31 * det2x2(a12, a13, a22, a23);
-}
-
-__device__ inline float det3x3R4(float4 A, float4 B, float4 C)
-{
-    return det3x3(A.x, A.y, A.z, B.x, B.y, B.z, C.x, C.y, C.z);
-}
-
-__device__ inline float4 get_plane_from_points(float4 A, float4 B, float4 C)
-{
-    float4 plane = cross(B - A, C - A);
-    plane.w = -dot3(plane, A);
-    return plane;
-}
-
 __device__ inline void swapUChar3(uchar3 &a, uchar3 &b)
 {
     uchar3 t = a;

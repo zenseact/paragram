@@ -65,11 +65,6 @@ struct BoxRadii
         H = upper.x * upper.x + upper.y * upper.y + upper.z * upper.z;
     }
 
-    __device__ __forceinline__ static BoxRadii Invalid()
-    {
-        return BoxRadii(-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f);
-    }
-
     __device__ __forceinline__ bool is_valid() { return A >= 0.0f; }
 };
 
