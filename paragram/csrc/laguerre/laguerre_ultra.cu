@@ -24,8 +24,6 @@
         throw std::runtime_error(message);                                                                             \
     }
 
-constexpr int bytes_to_kb(int bytes) { return bytes / 1024; }
-
 namespace laguerre
 {
 
@@ -145,11 +143,6 @@ __global__ void compute_bvh_power_diagram_kernel(
         {
             cell.CCGarbageCollect();
         }
-        // if (clip_counter > 50000)
-        // {
-        //     local_status = security_radius_not_reached;
-        //     return pwr_bvh::BoxRadii::Invalid();
-        // }
         pwr_bvh::BoxRadii bounds(cell.lower_bound, cell.upper_bound);
         return bounds;
     };

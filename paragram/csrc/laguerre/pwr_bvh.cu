@@ -157,7 +157,6 @@ __global__ void propagate_weights_kernel(Node *__restrict__ nodes,
 }
 
 __global__ void cuBQL_knn_kernel(int num_points,
-                                 int idOffset,
                                  const vec3f *__restrict__ points,
                                  cuBQL::BinaryBVH<float, 3> bvh,
                                  int *__restrict__ results,
@@ -246,7 +245,6 @@ build_pwr_bvh_and_knn(const float4 *points, float *points3, int num_points, int 
     if (K > 0)
     {
         cuBQL_knn_kernel<<<numBlocks, blockSize>>>(num_points,
-                                                   0,
                                                    reinterpret_cast<vec3f *>(points3),
                                                    cubql_bvh,
                                                    d_knn_ids,
@@ -330,7 +328,6 @@ build_cubql_bvh_and_knn(const float4 *points, float *points3, int num_points, in
     if (K > 0)
     {
         cuBQL_knn_kernel<<<numBlocks, blockSize>>>(num_points,
-                                                   0,
                                                    reinterpret_cast<vec3f *>(points3),
                                                    bvh,
                                                    d_knn_ids,
